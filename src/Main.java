@@ -40,8 +40,7 @@ public class Main {
         try {
 
           TreeMap rate = mapper.treeToValue(mapper.readValue(request.body(), JsonNode.class), java.util.TreeMap.class);
-          //System.out.println(rate);
-          //System.out.println("-> " + ratings.get(Double.parseDouble(rate.get("userId").toString())));
+
           if (ratings.get(Double.parseDouble(rate.get("userId").toString())) == null) {
             ratings.put(Double.parseDouble(rate.get("userId").toString()), new HashMap<Double, Double>() {
               {
@@ -52,9 +51,13 @@ public class Main {
             ratings.get(Double.parseDouble(rate.get("userId").toString())).put(Double.parseDouble(rate.get("movieId").toString()), Double.parseDouble(rate.get("rate").toString()));
           }
 
-          //System.out.println(ratings);
+          //response.header("location","/rates/"+rate.get("userId").toString());
+          //response.status(301);
 
-          return mapper.writeValueAsString(rate);
+          response.redirect("/rates/"+rate.get("userId").toString(),301);
+
+          //return mapper.writeValueAsString(rate);
+
         } catch (JsonProcessingException e) {
           e.printStackTrace();
         } catch (IOException e) {
@@ -63,6 +66,24 @@ public class Main {
         return null;
       }
     });
+
+    get(new Route("/rates/:userid") {
+      @Override
+      public Object handle(Request request, Response response) {
+        response.type("application/json");
+        Double userId = Double.parseDouble(request.params(":userid").toString());
+
+        try {
+          return mapper.writeValueAsString(
+                  ratings.get(userId)
+          );
+        } catch (JsonProcessingException e) {
+          e.printStackTrace();
+        }
+        return null;
+      }
+    });
+
 
     get(new Route("/users/share/:userid1/:userid2") {
       @Override
