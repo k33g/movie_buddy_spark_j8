@@ -15,7 +15,7 @@ import java.util.TreeMap;
 public class Main {
   public static void main(String[] args) throws IOException {
 
-    String path = new File("").getAbsolutePath();
+    String path = new File(".").getAbsolutePath();
 
     externalStaticFileLocation(path+"/public");
     //setPort(3000);
