@@ -18,13 +18,19 @@ public class Main {
     String path = new File("").getCanonicalPath();
 
     externalStaticFileLocation(path+"/public");
-    setPort(3000);
+    //setPort(3000);
+    setPort(Integer.valueOf(System.getProperty("app.port", "3000")));
+
+    //final int port = Integer.valueOf(System.getProperty("app.port", "3000"));
 
     HashMap<Double, HashMap<Double, Double>> ratings = new HashMap<>();
 
     final ObjectMapper mapper = new ObjectMapper();
-    List<HashMap> moviesList =  mapper.readValue(new File(path + "/json/movies.json"),List.class);
-    final List<HashMap> usersList =  mapper.readValue(new File(path + "/json/users.json"),List.class);
+    //List<HashMap> moviesList =  mapper.readValue(new File(path + "/json/movies.json"),List.class);
+    //final List<HashMap> usersList =  mapper.readValue(new File(path + "/json/users.json"),List.class);
+
+    List<HashMap> moviesList =  mapper.readValue(new File("movies.json"),List.class);
+    final List<HashMap> usersList =  mapper.readValue(new File("users.json"),List.class);
 
     String jsonMoviesList = mapper.writeValueAsString(moviesList);
     String jsonUsersList = mapper.writeValueAsString(usersList);
