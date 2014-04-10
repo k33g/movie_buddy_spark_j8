@@ -15,9 +15,15 @@ import java.util.TreeMap;
 public class Main {
   public static void main(String[] args) throws IOException {
 
-    String path = new File("").getAbsolutePath();
+    //String path = new File("").getAbsolutePath();
+    String path = System.getProperty("app.dir", new File("").getAbsolutePath());
 
-    externalStaticFileLocation(path+"/public");
+    if(!path.equals(new File("").getAbsolutePath())) { path+="/app";}
+
+    System.out.println("PATH : " + path);
+
+    //externalStaticFileLocation(path+"/public");
+    staticFileLocation("/public");
     //setPort(3000);
     setPort(Integer.valueOf(System.getProperty("app.port", "3000")));
 
@@ -26,9 +32,9 @@ public class Main {
     HashMap<Double, HashMap<Double, Double>> ratings = new HashMap<>();
 
     final ObjectMapper mapper = new ObjectMapper();
+
     List<HashMap> moviesList =  mapper.readValue(new File(path + "/json/movies.json"),List.class);
     final List<HashMap> usersList =  mapper.readValue(new File(path + "/json/users.json"),List.class);
-
 
     String jsonMoviesList = mapper.writeValueAsString(moviesList);
     String jsonUsersList = mapper.writeValueAsString(usersList);
